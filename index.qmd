@@ -195,7 +195,7 @@ The next stage is to create an `install.R` file. This is an R script that is run
 You could this manually but `holepunch` provides the nifty function `write_install()` that not only creates the file but also scans the project for dependencies and populates the file with the code to install them!
 
 ```{r}
-#| eval: true
+#| eval: false
 write_install()
 ```
 
@@ -223,7 +223,7 @@ By adding `r-<YYYY>-<MM>-<DD>` we are effectively telling binderhub that we want
 Holepunch provides another nice function, `write_runtime()`, for creating the file and also configuring it with today's date.
 
 ```{r}
-#| eval: true
+#| eval: false
 write_runtime()
 ```
 

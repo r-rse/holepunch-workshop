@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: ddeb2c51-fd2f-4da5-bf77-f954f160818d
+      url: 'https://holepunch-workshop.netlify.app'
