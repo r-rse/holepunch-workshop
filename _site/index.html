@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>holepunch-workshop - Binderising R projects with holepunch</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+</head>
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg navbar-dark "><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="https://www.r-rse.eu/" class="navbar-brand navbar-brand-logo">
+    <img src="./assets/logo/r-rse-logo2.png" alt="" class="navbar-logo"></a>
+    <a class="navbar-brand" href="https://www.r-rse.eu/">
+    <span class="navbar-title">holepunch-workshop</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+<div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#what-is-mybinder" id="toc-what-is-mybinder" class="nav-link active" data-scroll-target="#what-is-mybinder">What is mybinder?</a></li>
+  <li><a href="#what-is-holepunch" id="toc-what-is-holepunch" class="nav-link" data-scroll-target="#what-is-holepunch">What is <code>holepunch</code></a></li>
+  <li>
+<a href="#workshop-materials" id="toc-workshop-materials" class="nav-link" data-scroll-target="#workshop-materials">Workshop materials</a>
+  <ul class="collapse">
+<li><a href="#copy-compendium-template-github" id="toc-copy-compendium-template-github" class="nav-link" data-scroll-target="#copy-compendium-template-github">Copy compendium template (GitHub)</a></li>
+  <li><a href="#clone-repo" id="toc-clone-repo" class="nav-link" data-scroll-target="#clone-repo">Clone repo</a></li>
+  <li><a href="#create-new-rstudio-project-rstudio" id="toc-create-new-rstudio-project-rstudio" class="nav-link" data-scroll-target="#create-new-rstudio-project-rstudio">Create New RStudio Project (RStudio)</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#binderise-our-project" id="toc-binderise-our-project" class="nav-link" data-scroll-target="#binderise-our-project">Binderise our project</a>
+  <ul class="collapse">
+<li><a href="#install-holepunch" id="toc-install-holepunch" class="nav-link" data-scroll-target="#install-holepunch">Install holepunch</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#binderise-project-with-install.r-and-runtime.txt" id="toc-binderise-project-with-install.r-and-runtime.txt" class="nav-link" data-scroll-target="#binderise-project-with-install.r-and-runtime.txt">Binderise project with <code>install.R</code> and <code>runtime.txt</code></a>
+  <ul class="collapse">
+<li><a href="#create-install-r-branch-rstudio" id="toc-create-install-r-branch-rstudio" class="nav-link" data-scroll-target="#create-install-r-branch-rstudio">Create install-r branch (RStudio)</a></li>
+  <li><a href="#create-install.r-file-rstudio" id="toc-create-install.r-file-rstudio" class="nav-link" data-scroll-target="#create-install.r-file-rstudio">Create <code>install.R</code> file (RStudio)</a></li>
+  <li><a href="#create-runtime.txt-file-rstudio" id="toc-create-runtime.txt-file-rstudio" class="nav-link" data-scroll-target="#create-runtime.txt-file-rstudio">Create <code>runtime.txt</code> file (RStudio)</a></li>
+  <li><a href="#create-postbuild-file-rstudio" id="toc-create-postbuild-file-rstudio" class="nav-link" data-scroll-target="#create-postbuild-file-rstudio">Create <code>postBuild</code> file (RStudio)</a></li>
+  <li><a href="#generate-badge" id="toc-generate-badge" class="nav-link" data-scroll-target="#generate-badge">Generate badge!</a></li>
+  <li><a href="#commit-changes-rstudio" id="toc-commit-changes-rstudio" class="nav-link" data-scroll-target="#commit-changes-rstudio">Commit Changes (RStudio)</a></li>
+  <li><a href="#click-badge-generate-binder-github" id="toc-click-badge-generate-binder-github" class="nav-link" data-scroll-target="#click-badge-generate-binder-github">Click badge, generate binder (GitHub)</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#binderise-with-description-dockerfiles" id="toc-binderise-with-description-dockerfiles" class="nav-link" data-scroll-target="#binderise-with-description-dockerfiles">Binderise with Description &amp; Dockerfiles</a>
+  <ul class="collapse">
+<li><a href="#create-docker-branch-rstudio" id="toc-create-docker-branch-rstudio" class="nav-link" data-scroll-target="#create-docker-branch-rstudio">Create <code>docker</code> branch (RStudio)</a></li>
+  <li><a href="#create-compendium-description-file-rstudio" id="toc-create-compendium-description-file-rstudio" class="nav-link" data-scroll-target="#create-compendium-description-file-rstudio">Create compendium <code>DESCRIPTION</code> file (RStudio)</a></li>
+  <li><a href="#create-compendium-dockerfile-rstudio" id="toc-create-compendium-dockerfile-rstudio" class="nav-link" data-scroll-target="#create-compendium-dockerfile-rstudio">Create compendium Dockerfile (RStudio)</a></li>
+  <li><a href="#generate-badge-rstudio" id="toc-generate-badge-rstudio" class="nav-link" data-scroll-target="#generate-badge-rstudio">Generate badge (RStudio)</a></li>
+  <li><a href="#commit-all-changes" id="toc-commit-all-changes" class="nav-link" data-scroll-target="#commit-all-changes">Commit all changes</a></li>
+  <li><a href="#build-binder" id="toc-build-binder" class="nav-link" data-scroll-target="#build-binder">Build Binder</a></li>
+  <li><a href="#reproduce-paper-in-mybinder" id="toc-reproduce-paper-in-mybinder" class="nav-link" data-scroll-target="#reproduce-paper-in-mybinder">Reproduce paper in mybinder</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#merge-your-favourite-approach-into-main" id="toc-merge-your-favourite-approach-into-main" class="nav-link" data-scroll-target="#merge-your-favourite-approach-into-main">Merge your favourite approach into <code>main</code></a>
+  <ul class="collapse">
+<li><a href="#merge-install-r-into-main-github" id="toc-merge-install-r-into-main-github" class="nav-link" data-scroll-target="#merge-install-r-into-main-github">Merge <code>install-r</code> into <code>main</code> (GitHub)</a></li>
+  <li><a href="#pull-main-branch-locally-rstudio" id="toc-pull-main-branch-locally-rstudio" class="nav-link" data-scroll-target="#pull-main-branch-locally-rstudio">Pull <code>main</code> branch locally (RStudio)</a></li>
+  <li><a href="#correct-badge" id="toc-correct-badge" class="nav-link" data-scroll-target="#correct-badge">Correct badge</a></li>
+  </ul>
+</li>
+  </ul><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/r-rse/holepunch-workshop/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/r-rse/holepunch-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">Binderising R projects with <code>holepunch</code>
+</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><section id="what-is-mybinder" class="level2"><h2 class="anchored" data-anchor-id="what-is-mybinder">What is mybinder?</h2>
+<p>In a nutshell, mybinder provides a way for taking the static contents of a repository on, for example, GitHub and launching them in an interactive environment in the browser!</p>
+<p><img src="assets/images/binder-comic.png" class="img-fluid"></p>
+<p>Figure credit: <a href="https://opendreamkit.org/2017/11/02/use-case-publishing-reproducible-notebooks/">Juliette Taka, Logilab and the OpenDreamKit project</a></p>
+<p>To do so, repository owners add configuration files according the type of environment they wish to create which software called <code>repo2Docker</code> can use to create the specified computational environments. Here’s the <a href="https://mybinder.readthedocs.io/en/latest/using/config_files.html">full list of configuration files</a> that <code>docker2repo</code> recognises.</p>
+<p>To avoid confusion, let’s disambiguate some terms before moving on:</p>
+<section id="disambiguation" class="level4"><h4 class="anchored" data-anchor-id="disambiguation">Disambiguation</h4>
+<p>In this section, there are some related terms, which will be outlined here for clarity:</p>
+<ul>
+<li><p><strong>Project Binder</strong>: An open community that makes it possible to create sharable, interactive, reproducible environments. The technological output of this project is a <a href="https://the-turing-way.netlify.app/reproducible-research/binderhub.html#rr-binderhub">BinderHub</a>.</p></li>
+<li><p><strong>BinderHub</strong>: A cloud-based infrastructure for generating Binders. The most widely-used is <a href="https://mybinder.org/">mybinder.org</a>, which is maintained by the Project Binder team. It is built upon a range of open source tools, including <a href="https://z2jh.jupyter.org/">JupyterHub</a>, for providing cloud compute resources to users via a browser; and <a href="https://repo2docker.readthedocs.io/"><strong><code>repo2docker</code></strong></a>, for building docker images from projects. Since it is an open project, it is possible to create other BinderHubs which can support more specialised configurations. One such configuration could include authentication to enable private repositories to be shared amongst close collaborators.</p></li>
+<li><p><strong>A Binder</strong>: A sharable version of a project that can be viewed and interacted within a reproducible computational environment running in the cloud via a web browser. By automating the installation of the computing environment (as discussed in the <a href="https://the-turing-way.netlify.app/reproducible-research/renv.html#rr-renv">Reproducible Environments</a> chapter), Project Binder transforms the overhead of sharing such an environment into the act of sharing a URL.</p></li>
+<li><p><a href="https://mybinder.org/"><strong>mybinder.org</strong></a>: A public and free BinderHub. Because it is public, you should not use it if your project requires any personal or sensitive information (such as passwords).</p></li>
+<li><p><strong>Binderize</strong>: The process of making a Binder from a project.</p></li>
+</ul>
+<p><em>Disambiguation taken for the <a href="https://the-turing-way.netlify.app/communication/binder.html?highlight=binder#disambiguation">Turing Way chapter on Binder</a>.</em></p>
+</section></section><section id="what-is-holepunch" class="level2"><h2 class="anchored" data-anchor-id="what-is-holepunch">What is <code>holepunch</code>
+</h2>
+<p><code>holepunch</code> is an R package by Karthik Ram that helps automate the process of binderising an R project. It provides functions for creating the configuration files required to binderise and R project.</p>
+</section><section id="workshop-materials" class="level2"><h2 class="anchored" data-anchor-id="workshop-materials">Workshop materials</h2>
+<p>Today we’ll be working with <strong>a subset of materials from the published compendium</strong> of code, data, and author’s manuscript:</p>
+<section id="carl-boettiger.-2018-april-17.-cboettignoise-phenomena-supplement-to-from-noise-to-knowledge-how-randomness-generates-novel-phenomena-and-reveals-information-version-revision-2.-zenodo.-httpdoi.org10.5281zenodo.1219780" class="level5"><h5 class="anchored" data-anchor-id="carl-boettiger.-2018-april-17.-cboettignoise-phenomena-supplement-to-from-noise-to-knowledge-how-randomness-generates-novel-phenomena-and-reveals-information-version-revision-2.-zenodo.-httpdoi.org10.5281zenodo.1219780">Carl Boettiger. (2018, April 17). <em>cboettig/noise-phenomena: Supplement to: “From noise to knowledge: how randomness generates novel phenomena and reveals information”</em> (Version revision-2). <em>Zenodo</em>. http://doi.org/10.5281/zenodo.1219780</h5>
+<p>accompanying the publication:</p>
+</section><section id="carl-boettiger-.-from-noise-to-knowledge-how-randomness-generates-novel-phenomena-and-reveals-information.-published-in-ecology-letters-22-may-2018-httpsdoi.org10.1111ele.13085" class="level5"><h5 class="anchored" data-anchor-id="carl-boettiger-.-from-noise-to-knowledge-how-randomness-generates-novel-phenomena-and-reveals-information.-published-in-ecology-letters-22-may-2018-httpsdoi.org10.1111ele.13085">Carl Boettiger <a href="https://orcid.org/0000-0002-1642-628X"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" class="img-fluid"></a>. <em>From noise to knowledge: how randomness generates novel phenomena and reveals information</em>. Published in <em>Ecology Letters</em>, 22 May 2018 <a href="https://doi.org/10.1111/ele.13085" class="uri">https://doi.org/10.1111/ele.13085</a>
+</h5>
+<p><img src="assets/images/Boettiger-2018.png" class="img-fluid" data-heigth="250px"></p>
+<p>The materials have been compiled into a research compendium containing all data and code associated with the referenced publication, as well as a paper written in Rmarkdown which can be knitted to pdf, ready for submission to Ecology Letters.</p>
+<p>The <a href="https://github.com/r-rse/holepunch-compendium-tmpl">materials are available on GitHub</a> as a template repository.</p>
+</section><section id="copy-compendium-template-github" class="level3"><h3 class="anchored" data-anchor-id="copy-compendium-template-github">Copy compendium template (GitHub)</h3>
+<p>To access the materials, first head to:</p>
+<section id="httpsgithub.comr-rseholepunch-compendium-tmpl" class="level4 uri"><h4 class="uri anchored" data-anchor-id="httpsgithub.comr-rseholepunch-compendium-tmpl"><a href="https://github.com/r-rse/holepunch-compendium-tmpl"><strong>https://github.com/r-rse/holepunch-compendium-tmpl</strong></a></h4>
+<p>Next, click on <strong>Use this template</strong> &gt; <strong>Create a new repository</strong></p>
+<p><img src="assets/images/copy-tmpl.png" class="img-fluid"></p>
+</section><section id="complete-new-repo-details-github" class="level4"><h4 class="anchored" data-anchor-id="complete-new-repo-details-github">Complete new repo details (GitHub)</h4>
+<p>Next, complete the details for your copy of the repository:</p>
+<ul>
+<li><p><strong>Repository name:</strong> <code>holepunch-compendium</code></p></li>
+<li><p><strong>Description</strong>: <code>Binderised Research Compendium in R created using holepunch</code></p></li>
+</ul>
+<p><img src="assets/images/copy-tmpl-details.png" class="img-fluid"></p>
+<p>Finally, click on <strong>Create repository from template</strong> to create your repo.</p>
+</section></section><section id="clone-repo" class="level3"><h3 class="anchored" data-anchor-id="clone-repo">Clone repo</h3>
+<p>Once you’ve created your repo on GitHub, you’ll need to clone it to work with it locally.</p>
+<section id="copy-url-github" class="level4"><h4 class="anchored" data-anchor-id="copy-url-github">Copy URL (GitHub)</h4>
+<p>First click on <strong>Code</strong> and click on the clipboard icon on the HTTPS panel to copy the URL.</p>
+<p><img src="assets/images/inti-clone.png" class="img-fluid"></p>
+<p>Next let’s move to RStudio.</p>
+</section></section><section id="create-new-rstudio-project-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-new-rstudio-project-rstudio">Create New RStudio Project (RStudio)</h3>
+<p>We’ll start by creating a new project using:</p>
+<p><strong>File &gt; New Project</strong></p>
+<p>This opens up the New Project Wizard. Select <strong>Version Control</strong> as the source for our new project.</p>
+<p><img src="assets/images/new-proj-version-control.png" class="img-fluid"></p>
+<p>Next select <strong>Git</strong>:</p>
+<p><img src="assets/images/new-proj-git.png" class="img-fluid"></p>
+<p>Finally:</p>
+<ul>
+<li><p>Paste the URL of the repo you copied form GitHub in <strong>Repository URL</strong>.</p></li>
+<li><p>Select a destination for the cloned repo. I’m choosing to clone it to my <strong>Desktop</strong>.</p></li>
+</ul>
+<p><img src="assets/images/new-proj-details.png" class="img-fluid"></p>
+<p>Click on <strong>Create Project</strong> which will clone the repository from GitHub and launch the new project in RStudio.</p>
+<p><img src="assets/images/cloned-repo.png" class="img-fluid"></p>
+<p>Let’s use the <code>dir_tree()</code> function in package <code>fs</code> to examine the contents of the repository. The main files of interest are highlighted:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html">dir_tree</a></span><span class="op">(</span>recurse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>.
+├── CONDUCT.md
+├── CONTRIBUTING.md
+├── LICENSE
+├── LICENSE.md
+├── R
+│   └── process-data.R &lt;- R function used in paper
+├── README.Rmd
+├── README.md
+├── analysis
+│   ├── data
+│   │   ├── DO-NOT-EDIT-ANY-FILES-IN-HERE-BY-HAND
+│   │   └── raw_data
+│   │       └── gillespie.csv &lt;- raw data
+│   ├── paper
+│   │   ├── elsarticle.cls &lt;- template for Latex styling of the article
+│   │   ├── mybibfile.bib
+│   │   ├── numcompress.sty
+│   │   ├── paper.Rmd &lt;- The paper written in Rmarkdown
+│   │   ├── paper.fff
+│   │   ├── paper.pdf 
+│   │   ├── paper.spl
+│   │   ├── paper.tex
+│   │   ├── paper_files
+│   │   │   └── figure-latex
+│   │   │       └── figure1-1.pdf
+│   │   └── refs.bib &lt;- The bibliography used for references in the paper 
+│   └── templates
+│       ├── journal-of-archaeological-science.csl
+│       ├── template.Rmd
+│       └── template.docx
+└── holepunch-compendium-tmpl.Rproj</code></pre>
+</section></section><section id="binderise-our-project" class="level2"><h2 class="anchored" data-anchor-id="binderise-our-project">Binderise our project</h2>
+<p>Before we can binderise our project, let’s first install holepunch</p>
+<section id="install-holepunch" class="level3"><h3 class="anchored" data-anchor-id="install-holepunch">Install holepunch</h3>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"karthik/holepunch"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Using github PAT from envvar GITHUB_PAT</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Skipping install of 'holepunch' from a github remote, the SHA1 (031fd961) has not changed since last install.
+  Use `force = TRUE` to force installation</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/karthik/holepunch">holepunch</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I’m going to show you two ways to binderise your projects today, the standard way and the R compendium way.</p>
+<p>Let’s start with the standard way to configure your R project, as recommended by the binder project.</p>
+<p>To show you the two approaches, I’m going to prepare each approach in a separate git branch. At the end, you can choose which approach you prefer and we’ll merge that into our main branch. You will however have a lasting record of the two approaches in the two separate branches.</p>
+</section></section><section id="binderise-project-with-install.r-and-runtime.txt" class="level2"><h2 class="anchored" data-anchor-id="binderise-project-with-install.r-and-runtime.txt">Binderise project with <code>install.R</code> and <code>runtime.txt</code>
+</h2>
+<p>To show you the standard approach we’ll be working in a a branch called <code>install-r</code>. So let’s go ahead and create it.</p>
+<section id="create-install-r-branch-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-install-r-branch-rstudio">Create install-r branch (RStudio)</h3>
+<p>In the RStudio git panel, click on the <strong>new branch</strong> button which launches a new branch pop up.</p>
+<p>Give the new branch the name <code>install-r</code> and click on <strong>Create</strong>.</p>
+<p><img src="assets/images/install-r-branch.png" class="img-fluid"></p>
+<p>You should now be in the <code>install-r</code> branch.</p>
+<p><img src="assets/images/install-r-branch-cmpl.png" class="img-fluid"></p>
+</section><section id="create-install.r-file-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-install.r-file-rstudio">Create <code>install.R</code> file (RStudio)</h3>
+<p>The next stage is to create an <code>install.R</code> file. This is an R script that is run when building our computational environment and should contain code to install all necessary packages.</p>
+<p>You could this manually but <code>holepunch</code> provides the nifty function <code><a href="https://rdrr.io/pkg/holepunch/man/write_install.html">write_install()</a></code> that not only creates the file but also scans the project for dependencies and populates the file with the code to install them!</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/holepunch/man/write_install.html">write_install</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Finding R package dependencies ... Done!</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>✔ Leaving './.binder/install.R' unchanged</code></pre>
+</div>
+</div>
+<pre><code>✔ Writing './.binder/install.R'
+
+.binder
+└── install.R</code></pre>
+<p>The function creates and writes the file to a hidden <code>.binder</code> directory.</p>
+<p>If you open the file, you will see a character vector of all the packages required to reproduce our paper was created and wrapped in the <code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages()</a></code> function.</p>
+<p><img src="assets/images/install-r.png" class="img-fluid"></p>
+</section><section id="create-runtime.txt-file-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-runtime.txt-file-rstudio">Create <code>runtime.txt</code> file (RStudio)</h3>
+<p>The <code>runtime.txt</code> is effectively the file that freezes the versions of R and any packages installed in time.</p>
+<p>By adding <code>r-&lt;YYYY&gt;-&lt;MM&gt;-&lt;DD&gt;</code> we are effectively telling binderhub that we want an R environment created with the version of R and any packages specified in <code>install.R</code> that were current on the date specified installed. We can also request a specific version of R with <code>r-&lt;version&gt;-&lt;YYYY&gt;-&lt;MM&gt;-&lt;DD&gt;</code>.</p>
+<ul>
+<li><p>For dates prior to 2022-01-01, R and packages are installed from snapshots on <a href="https://mran.microsoft.com/documents/rro/reproducibility">MRAN</a>. However, MRAN will be shutting down however in July.</p></li>
+<li><p>If we request R 4.1 or later, or specify a snapshot date newer than <code>2022-01-01</code>, <a href="https://packagemanager.rstudio.com/client/#/">packagemanager.rstudio.com</a> is used to provide much faster installations via <a href="https://www.rstudio.com/blog/package-manager-v1-1-no-interruptions/">binary packages</a>.</p></li>
+</ul>
+<p>Holepunch provides another nice function, <code><a href="https://rdrr.io/pkg/holepunch/man/write_runtime.html">write_runtime()</a></code>, for creating the file and also configuring it with today’s date.</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/holepunch/man/write_runtime.html">write_runtime</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>.binder
+├── install.R
+└── runtime.txt</code></pre>
+<p><img src="assets/images/runtime-txt.png" class="img-fluid"></p>
+</section><section id="create-postbuild-file-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-postbuild-file-rstudio">Create <code>postBuild</code> file (RStudio)</h3>
+<p>There’s one last thing we need to take care of. In my tests I found that, for some reason, there was a problem with Tex installation in the binder environment that was preventing successful rendering of our paper to pdf.</p>
+<p>Re-installing <code>TinyTex</code> which is used by the <code>rticles</code> package through package <code>bookdown</code> seemed to fix this issue.</p>
+<p>It would be nice if somebody launching our binder did not have to do this manually (and would save us having to document the step also!)</p>
+<p>Luckily there is another configuration file available to us we can use, <code>postBuild</code>!</p>
+<p>There isn’t a <code>holepunch</code> function for this so let’s create it manually in the <code>.binder/</code> directory.</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.create</a></span><span class="op">(</span><span class="st">".binder/postBuild"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>.binder
+├── install.R
+├── postBuild
+└── runtime.txt</code></pre>
+<p><code>postBuild</code> (with no file extension) is a script that can contain arbitrary commands to be run after the whole repository has been built. To make it a shell script we use <code>#!/bin/bash</code> at the top. Then we tell it to run the <code>R</code> command <code>tinytex::install_tinytex(force = TRUE)</code> in the next line.</p>
+<pre><code>#!/bin/bash
+R -e "tinytex::install_tinytex(force = TRUE)"</code></pre>
+<p>Your file should look like this:</p>
+<p><img src="assets/images/postBuild.png" class="img-fluid"></p>
+</section><section id="generate-badge" class="level3"><h3 class="anchored" data-anchor-id="generate-badge">Generate badge!</h3>
+<p>Now it’s time to generate our badge to include in our README!</p>
+<p>We use function <code><a href="https://rdrr.io/pkg/holepunch/man/generate_badge.html">generate_badge()</a></code> and set the branch argument to <code>install-r</code>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/holepunch/man/generate_badge.html">generate_badge</a></span><span class="op">(</span>branch <span class="op">=</span> <span class="st">"install-r"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>✔ Setting active project to '/Users/Anna/Desktop/holepunch-compendium'
+• Copy and paste the following lines into 'README.Rmd':
+  &lt;!-- badges: start --&gt;
+  [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/annakrystalli/holepunch-compendium/install-r?urlpath=rstudio)
+  &lt;!-- badges: end --&gt;
+  [Copied to clipboard]</code></pre>
+<p>Once generated, the badge is now on our clickboard, ready to be pasted in our README. So let’s:</p>
+<ul>
+<li><p>Open <code>README.Rmd</code>.</p></li>
+<li><p>Paste the badge at the top of the file (below the YAML header).</p></li>
+<li><p>Knit the document to create <code>README.md</code>.</p></li>
+</ul>
+<p><img src="assets/images/badge-readme.png" class="img-fluid"></p>
+</section><section id="commit-changes-rstudio" class="level3"><h3 class="anchored" data-anchor-id="commit-changes-rstudio">Commit Changes (RStudio)</h3>
+<p>Let’s now commit everything and push to Github!</p>
+<p><img src="assets/images/commit-install-r.png" class="img-fluid"></p>
+</section><section id="click-badge-generate-binder-github" class="level3"><h3 class="anchored" data-anchor-id="click-badge-generate-binder-github">Click badge, generate binder (GitHub)</h3>
+<p>Let’s head back to our repo and specifically the <code>install-r</code> branch:</p>
+<p><img src="assets/images/install_r_branch.png" class="img-fluid"></p>
+<p>Once on the correct branch, scroll down to the README and click the binder badge</p>
+<p><img src="assets/images/install_r_badge.png" class="img-fluid"></p>
+<p>That’s it!</p>
+<p>This now takes you to <a href="https://mybinder.org/">mybinder.org</a> which will start preparing an interactive instance of your repository!</p>
+<p><img src="assets/images/launch-binder.png" class="img-fluid"></p>
+<p>What’s going on in the background?</p>
+<ul>
+<li><p>Binder is using the configuration files provided and software called <code>repo2Docker</code> to create a Dockerfile, a recipe for your computational environment.</p></li>
+<li><p>Binder is using the Dockerfile to create a binder image, with all the software described in your configuration file installed. This takes some time but, once completed, binder will save the image so the next time you re-launch, this stage will be a lot faster.</p></li>
+<li><p>Binder will then use the image to launch an interactive container on JupyterHub in which we can interact with the code and data in our repo!</p></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="assets/images/binderhub_graphic.svg" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Illustration about BinderHub architecture. The Turing Way project illustration by Scriberia. Used under a CC-BY 4.0 licence. DOI: 10.5281/zenodo.3332807</figcaption><p></p>
+</figure>
+</div>
+<p>Once our container is ready, binder launches our repo in an instance of Rstudio Server. We can can now reproduce our paper in Binder!</p>
+<p><img src="assets/images/launched_install_r_binder.png" class="img-fluid"></p>
+<p>So let’s head to <code>analysis/paper/paper.Rmd</code> and open that file. At the top of the left hand panel, click on <strong>Knit</strong>. (and click yes to update the <code>rmarkdown</code> package if asked)</p>
+<p><img src="assets/images/launche_install_r_paper.png" class="img-fluid"></p>
+<p>If everything went well, you should now see a rendered pdf of our paper! Reproducibility accomplished!</p>
+<p><img src="assets/images/launched_install_r_pdf.png" class="img-fluid"></p>
+</section></section><section id="binderise-with-description-dockerfiles" class="level2"><h2 class="anchored" data-anchor-id="binderise-with-description-dockerfiles">Binderise with Description &amp; Dockerfiles</h2>
+<p>Another way we can binderise our projects using <code>holepunch</code> is by:</p>
+<ul>
+<li><p>Managing dependencies through a <code>DESCRIPTION</code> file.</p></li>
+<li><p>Creating our environment using our own <code>Dockerfile</code>.</p></li>
+</ul>
+<p>This method is tied to setting up your project as a <strong>research compendium.</strong></p>
+<p>If you are unfamiliar with the idea of research compendia, I highly recommend reading this paper by Marwick et al:</p>
+<p><em>Marwick B, Boettiger C, Mullen L. 2018. <a href="https://peerj.com/preprints/3192/">Packaging data analytical work reproducibly using R (and friends)</a> PeerJ Preprints 6:e3192v2 <a href="https://doi.org/10.7287/peerj.preprints.3192v2" class="uri">https://doi.org/10.7287/peerj.preprints.3192v2</a></em></p>
+<p>Also check out package <a href="https://github.com/benmarwick/rrtools"><code>rrtools</code></a> that can help you package your research projects as research compendia as well the following <a href="https://annakrystalli.me/rrresearchACCE20/creating-a-research-compendium-with-rrtools.html">tutorial</a> which is how the materials we are working with were initially put together as a research compendium, using <code>rrtools</code>.</p>
+<section id="create-docker-branch-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-docker-branch-rstudio">Create <code>docker</code> branch (RStudio)</h3>
+<p>Let’s go back to RStudio.</p>
+<p>We’ll again work on a separate branch. We want to branch off <code>main</code> again so first let’s go back to <code>main</code> by checking it out in the RStudio git panel:</p>
+<p><img src="assets/images/checkout-main.png" class="img-fluid" width="600"></p>
+<p>You should now be in the <strong>main</strong> branch.</p>
+<p>Next let’s follow the same</p>
+</section><section id="create-compendium-description-file-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-compendium-description-file-rstudio">Create compendium <code>DESCRIPTION</code> file (RStudio)</h3>
+<p>The <code>DESCRIPTION</code> file is a key file in R packages containing metadata. One of these metadata is also a list of package imports. We can therefore use this facility to list our dependencies in a <code>DESCRIPTION</code> file.</p>
+<p><code>holepunch</code> has another function for creating an appropriate <code>DESCRIPTION</code> file for our compendium. It will again scan our repository for dependencies and list them in the <code>Depends:</code> section.</p>
+<p>The description file effectively allows us to turn our compendium into a package. So we need to give it a <code>package</code> name and <code>description</code>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/holepunch/man/write_compendium_description.html">write_compendium_description</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"holepunchCompendium"</span>, </span>
+<span>                             description <span class="op">=</span> <span class="st">"Binderised Research Compendium in R created using holepunch"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Finding R package dependencies ... Done!
+✔ Writing './DESCRIPTION'
+ℹ Please update the description fields, particularly the title, description and author</code></pre>
+<p>A <code>DESCRIPTION</code> file is created in the root of our directory. Let’s open it up.</p>
+<p>There’s some additional fields to fill in. Go ahead and complete them for posterity.</p>
+<p>Here’s what my finished version looks like:</p>
+<pre><code>Type: Compendium
+Package: holepunchCompendium
+Title: Binderised Research Compendium in R created using holepunch
+Version: 0.0.1
+Authors@R: 
+    person("Anna", "Krystalli", , "annakrystalli@googlemail.com", role = c("aut", "cre"))
+Description: Binderised Research Compendium in R created using holepunch
+License: MIT
+Depends: 
+    dplyr,
+    ggplot2,
+    ggthemes,
+    here,
+    knitr,
+    readr,
+    rmarkdown,
+    rticles
+Encoding: UTF-8
+LazyData: true</code></pre>
+<p>Feel free to copy and edit. Just make sure it still remains a valid YAML file format (i.e.&nbsp;errors in indentation can make the file unreadable!</p>
+<p><code>repo2docker</code> can now use this file to install our dependencies. To pin the versions of our dependencies we could just include another <code>runtime.txt</code> and be done.</p>
+<p>I want to show you a different approach offered by <code>holepunch</code> so you are aware of it.</p>
+</section><section id="create-compendium-dockerfile-rstudio" class="level3"><h3 class="anchored" data-anchor-id="create-compendium-dockerfile-rstudio">Create compendium Dockerfile (RStudio)</h3>
+<p>In the first approach to binderise our project, <code>repo2docker</code> created a Dockerfile in the background and used it to build us a computational environent.</p>
+<p>We can however by pass that step by providing our own Dockerfile and <code>holepunch</code> has function <code><a href="https://rdrr.io/pkg/holepunch/man/write_dockerfile.html">write_dockerfile()</a></code> for doing this.</p>
+<p>We need to provide it with the name of the Dockerfile maintainer and again we specify the branch we are working in:</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/holepunch/man/write_dockerfile.html">write_dockerfile</a></span><span class="op">(</span>maintainer <span class="op">=</span> <span class="st">"Anna Krystalli"</span>, branch <span class="op">=</span> <span class="st">"docker"</span><span class="op">)</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>✔ Setting active project to '/Users/Anna/Desktop/holepunch-compendium'
+[1] TRUE
+→ Setting R version to 4.2.2
+→ Locking packages down at 2023-02-09
+✔ Dockerfile generated at ./.binder/Dockerfile
+Warning message:
+In write_dockerfile(maintainer = "Anna Krystalli", branch = "docker") :
+  The version of R matching the last modified file in this project is 4.2.2 and is 
+the one being used in your Dockerfile. However, you are running 4.2.1 locally.
+Assuming your code runs without errors, it might be ok to leave the Dockerfile at 
+4.2.2. But if you wish to stick to your local version, you can re-run this 
+function with a fixed date using r_date.</code></pre>
+<p>We’re getting a warning that the version of R pinned to the Dockerfile by today’s date is later than the one I have installed. I could correct this if I thought it would be a problem by specifying an earlier date using the <code>r_date</code> argument. But I know it’s not an issue so the version current for today’s date will work fine.</p>
+<p>Let’s have a look at the contents of the file:</p>
+<pre><code>FROM rocker/binder:4.2.2
+LABEL maintainer='Anna Krystalli'
+COPY --chown=${NB_USER} . ${HOME}
+USER ${NB_USER}
+
+
+
+RUN wget https://github.com/annakrystalli/holepunch-compendium/raw/docker/DESCRIPTION &amp;&amp; R -e "options(repos = list(CRAN = 'http://mran.revolutionanalytics.com/snapshot/2023-02-12/')); devtools::install_deps()"
+
+RUN rm DESCRIPTION.1; exit 0</code></pre>
+<p>What this is effectively doing is:</p>
+<ul>
+<li><p>pulling the <a href="https://hub.docker.com/r/rocker/binder/tags">latest <code>binder</code> image</a> (version 4.2.2) maintained by the <a href="https://rocker-project.org/"><code>rocker</code></a> project from dockerhub.</p></li>
+<li><p>Copying the contents of our repository into the container and giving appropriate rights</p></li>
+<li><p>Setting the user to <code>NB_USER</code></p></li>
+<li><p>Following that is fetching the DESCPRIPTION file from our repo</p></li>
+<li><p>It is then running an R command to install the dependencies listed in our DESCRIPTION files with the command <code><a href="https://devtools.r-lib.org/reference/install_deps.html">devtools::install_deps()</a></code>.</p></li>
+<li><p>Note that the versions are pinned to today’s date through setting the <code>repos</code> option to <code>http://mran.revolutionanalytics.com/snapshot/2023-02-09/</code> through command <code>options(repos = list(CRAN = 'http://mran.revolutionanalytics.com/snapshot/2023-02-09/'))</code></p></li>
+</ul>
+<section id="edit-dockerfile" class="level4"><h4 class="anchored" data-anchor-id="edit-dockerfile">Edit Dockerfile</h4>
+<p>There are a couple amendments to the Dockerfile we need to make:</p>
+<ul>
+<li><p>First, there is a problem with the latest binder image with the installation of RStudio server. Change the version of the binder image to <code>rocker/binder:4.2.0</code> for it to work.</p></li>
+<li><p>Next let’s add our command to install tinytex to our sequence of R commands, after <code><a href="https://devtools.r-lib.org/reference/install_deps.html">devtools::install_deps()</a></code> like so: <code><a href="https://devtools.r-lib.org/reference/install_deps.html">devtools::install_deps(); tinytex::install_tinytex(force = TRUE)</a></code></p></li>
+</ul>
+<!-- --><pre><code>FROM rocker/binder:4.2.0
+LABEL maintainer='Anna Krystalli'
+COPY --chown=${NB_USER} . ${HOME}
+USER ${NB_USER}
+
+
+
+RUN wget https://github.com/annakrystalli/holepunch-compendium/raw/docker/DESCRIPTION &amp;&amp; R -e "options(repos = list(CRAN = 'http://mran.revolutionanalytics.com/snapshot/2023-02-09/')); devtools::install_deps(); tinytex::install_tinytex(force = TRUE)"
+
+RUN rm DESCRIPTION.1; exit 0</code></pre>
+</section></section><section id="generate-badge-rstudio" class="level3"><h3 class="anchored" data-anchor-id="generate-badge-rstudio">Generate badge (RStudio)</h3>
+<p>Just like before let’s generate our badge, this time for branch <code>docker</code>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/holepunch/man/generate_badge.html">generate_badge</a></span><span class="op">(</span>branch <span class="op">=</span> <span class="st">"docker"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>• Copy and paste the following lines into 'README.Rmd':
+  &lt;!-- badges: start --&gt;
+  [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/annakrystalli/holepunch-compendium/docker?urlpath=rstudio)
+  &lt;!-- badges: end --&gt;
+  [Copied to clipboard]</code></pre>
+<p>Just like before:</p>
+<ul>
+<li><p>Open <code>README.Rmd</code>.</p></li>
+<li><p>Paste the badge at the top of the file (below the YAML header).</p></li>
+<li><p>Knit the document to create <code>README.md</code>.</p></li>
+</ul></section><section id="commit-all-changes" class="level3"><h3 class="anchored" data-anchor-id="commit-all-changes">Commit all changes</h3>
+<p>Again commit all changes and make sure to <strong>PUSH TO GITHUB.</strong></p>
+</section><section id="build-binder" class="level3"><h3 class="anchored" data-anchor-id="build-binder">Build Binder</h3>
+<p>Another convenience function offered by <code>holepunch</code> is <code><a href="https://rdrr.io/pkg/holepunch/man/build_binder.html">build_binder()</a></code></p>
+<p>This function builds binder in the background and once an image is ready, will open the Binder URL</p>
+<p>Let’s go ahead and use it:</p>
+<div class="cell">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/holepunch/man/build_binder.html">build_binder</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>ℹ Your Binder is being built in the background. Once built, your browser will automatically launch. You can also click the binder badge on your README at any time.
+Hey Anna, welcome back, time to Rrrrrrrrock!
+Hey Anna, welcome back, time to Rrrrrrrrock!
+Hey Anna, welcome back, time to Rrrrrrrrock!</code></pre>
+</section><section id="reproduce-paper-in-mybinder" class="level3"><h3 class="anchored" data-anchor-id="reproduce-paper-in-mybinder">Reproduce paper in mybinder</h3>
+<p>As we did before with the <code>install-r</code> approach, let’s reproduce our paper:</p>
+<ul>
+<li><p>open <code>analysis/paper/paper.Rmd</code></p></li>
+<li><p>Knit!</p></li>
+</ul>
+<p>You should be again looking at a successfuly rendered pdf version of the paper!</p>
+</section></section><section id="merge-your-favourite-approach-into-main" class="level2"><h2 class="anchored" data-anchor-id="merge-your-favourite-approach-into-main">Merge your favourite approach into <code>main</code>
+</h2>
+<p>We’ve played around in two separate branches. Let’s now merge our preferred approach into the <code>main</code> branch.</p>
+<p>I recommend merging the <code>install-r</code> branch.</p>
+<p>That’s because of the current limitations of the Dockerfile approach:</p>
+<ul>
+<li><p>the problem with the latest <code>rocker/binder</code> image it is based on.</p></li>
+<li><p>the fact that <code>holepunch</code> still uses <code>MRAN</code> snapshots in it’s Dockerfile to pin versions. As mentioned this will be obsolete in July 2023. I’ve opened an issue in the package so hopefully this will be fixed soon.</p></li>
+<li><p>Overall I just wanted you to be aware of this approach in case you are well versed in Docker and would prefer to configure your projects with Dockerfiles.</p></li>
+</ul>
+<section id="merge-install-r-into-main-github" class="level3"><h3 class="anchored" data-anchor-id="merge-install-r-into-main-github">Merge <code>install-r</code> into <code>main</code> (GitHub)</h3>
+<ul>
+<li><p>Go to the <code>install-r</code> branch and click <strong>Contribute</strong></p></li>
+<li><p>Open a pull request</p></li>
+<li><p>Merge pull request</p></li>
+</ul></section><section id="pull-main-branch-locally-rstudio" class="level3"><h3 class="anchored" data-anchor-id="pull-main-branch-locally-rstudio">Pull <code>main</code> branch locally (RStudio)</h3>
+<ul>
+<li><p>Checkout the <code>main</code> branch.</p></li>
+<li><p>Pull</p></li>
+</ul></section><section id="correct-badge" class="level3"><h3 class="anchored" data-anchor-id="correct-badge">Correct badge</h3>
+<p>Change the URL in the badge in the README.Rmd to point to the <code>main</code> branch:</p>
+<pre><code>[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/annakrystalli/holepunch-compendium/main?urlpath=rstudio)</code></pre>
+<p>Re-render <code>README.Rmd</code>, commit changes and push!</p>
+<p>You’re repo is now all set up!</p>
+
+
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

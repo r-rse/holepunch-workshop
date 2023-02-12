@@ -1,0 +1,33 @@
+project:
+  type: website
+
+website:
+  title: "holepunch-workshop"
+  repo-url: https://github.com/r-rse/holepunch-workshop
+  repo-actions: [edit, issue]
+  page-navigation: true
+  navbar:
+    logo: assets/logo/r-rse-logo2.png
+    logo-href: https://www.r-rse.eu/
+    pinned: true
+    search: true
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - styles.scss
+    toc: true
+    mainfont: 'Work Sans'
+    code-copy: true
+    code-overflow: wrap
+    code-link: true
+    fig-responsive: true
+    highlight-style: "dracula"
+
+editor: visual
+
